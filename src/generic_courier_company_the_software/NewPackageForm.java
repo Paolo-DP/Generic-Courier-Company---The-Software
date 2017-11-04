@@ -14,7 +14,7 @@ import java.sql.*;
  * @author Lenovo
  */
 public class NewPackageForm extends javax.swing.JFrame implements CourierConstants{
-
+    String message;
     /**
      * Creates new form NewPackageForm
      */
@@ -44,18 +44,21 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
         jLabel10 = new javax.swing.JLabel();
         minutetext = new javax.swing.JTextField();
         weightlabel = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
+        weighttext = new javax.swing.JTextField();
+        volumetext = new javax.swing.JTextField();
         volumelabel = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        courierlabel = new javax.swing.JLabel();
+        couriertext = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
+        descriptionlabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         description = new javax.swing.JTextArea();
         jPanel8 = new javax.swing.JPanel();
         submitbutton = new javax.swing.JButton();
         cancelbutton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -103,12 +106,12 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
 
         weightlabel.setText("Weight:");
 
-        jTextField6.setPreferredSize(new java.awt.Dimension(50, 22));
+        weighttext.setPreferredSize(new java.awt.Dimension(50, 22));
 
-        jTextField7.setPreferredSize(new java.awt.Dimension(50, 22));
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
+        volumetext.setPreferredSize(new java.awt.Dimension(50, 22));
+        volumetext.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
+                volumetextActionPerformed(evt);
             }
         });
 
@@ -119,6 +122,15 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
 
         jLabel14.setText("cu. cm");
 
+        courierlabel.setText("Courier ID:");
+
+        couriertext.setToolTipText("");
+        couriertext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                couriertextActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -127,38 +139,45 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(datelabel)
-                        .addGap(18, 18, 18)
-                        .addComponent(yeartext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(monthtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(daytext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(hourtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(minutetext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(weightlabel)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(weighttext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel13))
+                        .addComponent(jLabel13)
+                        .addGap(89, 89, 89)
+                        .addComponent(courierlabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(couriertext))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(volumelabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel14)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(datelabel)
+                                .addGap(18, 18, 18)
+                                .addComponent(yeartext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(monthtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(daytext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(hourtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(minutetext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(volumelabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(volumetext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel14)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,17 +196,19 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(weightlabel)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13))
+                    .addComponent(weighttext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13)
+                    .addComponent(courierlabel)
+                    .addComponent(couriertext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(volumelabel)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(volumetext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel6.setText("Description:");
+        descriptionlabel.setText("Description (500 char):");
 
         description.setColumns(20);
         description.setLineWrap(true);
@@ -203,7 +224,7 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
+                        .addComponent(descriptionlabel)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -211,7 +232,7 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel6)
+                .addComponent(descriptionlabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
                 .addContainerGap())
@@ -235,50 +256,61 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(143, 143, 143)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap(40, Short.MAX_VALUE)
                 .addComponent(submitbutton)
-                .addGap(108, 108, 108)
+                .addGap(18, 18, 18)
                 .addComponent(cancelbutton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(63, 63, 63))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(28, Short.MAX_VALUE)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(submitbutton)
                     .addComponent(cancelbutton))
-                .addGap(21, 21, 21))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setText("NEW PACKAGE");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(76, 76, 76))
-                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(61, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(23, 23, 23)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(76, 76, 76))
+                                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(jLabel1)))
+                        .addGap(0, 17, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(52, 52, 52)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -296,49 +328,72 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
         // TODO add your handling code here:
     }//GEN-LAST:event_daytextActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void volumetextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volumetextActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_volumetextActionPerformed
 
     private void submitbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbuttonActionPerformed
         if(validinputs()){
             try{
+                String datedeposit = yeartext.getText()+monthtext.getText()+daytext.getText();
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection(database_url, "root", "");
-                PreparedStatement track = conn.prepareStatement("SELECT MAX(package_ID) AS IDMAX FROM package_inventory WHERE deposit_date = " + (yeartext.getText()+monthtext.getText()+daytext.getText()));
+                PreparedStatement track = conn.prepareStatement("SELECT package_ID FROM package_inventory WHERE deposit_date = " + datedeposit);
                 ResultSet rs = track.executeQuery();
-                String trackingnum;
+                String trackingnum="1";
                 if(rs.next()){
-                    trackingnum = Integer.toHexString(rs.getInt("IDMAX")+1);
-                }
-                else{
-                    trackingnum = Integer.toHexString(Integer.parseInt(yeartext.getText()+monthtext.getText()+daytext.getText()+"000000"));
+                    track = conn.prepareStatement("SELECT MAX(package_ID) FROM package_inventory WHERE deposit_date = " + datedeposit);
+                    rs = track.executeQuery();
+                    rs.next();
+                    trackingnum = Long.toHexString(rs.getLong(1)+1);
                     
                 }
-                System.out.println("ID: " + Integer.decode("0x"+trackingnum) + "\nTracking: " + trackingnum);
-                //PreparedStatement pst = conn.prepareStatement("insert into package_inventory (package_ID,trackingnum)");
+                else{
+                    trackingnum = Long.toHexString(Long.parseLong(yeartext.getText()+monthtext.getText()+daytext.getText()+"000000")).toUpperCase();
+                }
+                //System.out.println("ID: " + Long.decode("0x"+trackingnum) + "\nTracking: " + trackingnum);
+                PreparedStatement pst = conn.prepareStatement(newpackinsert);
+                pst.setLong(1, Long.decode("0x" + trackingnum));
+                pst.setString(2, trackingnum);
+                pst.setInt(3, Integer.parseInt(hourtext.getText() + minutetext.getText()));
+                pst.setInt(4, Integer.parseInt(datedeposit));
+                pst.setDouble(5, Double.parseDouble(weighttext.getText()));
+                pst.setDouble(6, Double.parseDouble(volumetext.getText()));
+                pst.setString(7, description.getText());
+                pst.setString(8, "Processing");
+                pst.setInt(9, Integer.parseInt(couriertext.getText()));
+                pst.executeUpdate();
+                
             }catch(Exception e){
-                JOptionPane.showMessageDialog(null, "Database Error");
+                JOptionPane.showMessageDialog(null, "Database Error " + e);
+                System.out.println(e);
             }
         }
         else{
-            JOptionPane.showMessageDialog(null, "Invalid Package Details", "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, message, "ERROR", JOptionPane.ERROR_MESSAGE);
         }
         
     }//GEN-LAST:event_submitbuttonActionPerformed
 
+    private void couriertextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_couriertextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_couriertextActionPerformed
+
     private boolean validinputs(){
+        message = "Invalid Package Details";
+        
+        boolean valid = true;
+        datelabel.setBackground(labeldefaultbg);
         datelabel.setOpaque(false);
+        weightlabel.setBackground(labeldefaultbg);
         weightlabel.setOpaque(false);
+        volumelabel.setBackground(labeldefaultbg);
         volumelabel.setOpaque(false);
-        /*if(!yeartext.getText().matches("0-9")){
-            datelabel.setOpaque(true);
-            datelabel.setBackground(Color.orange);
-            return false;
-        }
-        else
-            return true;
-        */
+        courierlabel.setBackground(labeldefaultbg);
+        courierlabel.setOpaque(false);
+        descriptionlabel.setBackground(labeldefaultbg);
+        descriptionlabel.setOpaque(false);
+        
         if(
                 Integer.parseInt(yeartext.getText())<0 ||
                 Integer.parseInt(monthtext.getText())<1 ||
@@ -347,10 +402,61 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
                 Integer.parseInt(daytext.getText()) > 31 ){
             datelabel.setOpaque(true);
             datelabel.setBackground(Color.orange);
-            return false;
+            valid=false;
         }
-        else
-            return true;
+        if(couriertext.getText().length()==0){
+            courierlabel.setOpaque(true);
+            courierlabel.setBackground(Color.orange);
+            message += "\nCourier ID field empty";
+            valid=false;
+        }
+        else{
+            try{
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection conn = DriverManager.getConnection(database_url, "root", "");
+                Statement stat = conn.createStatement();
+                ResultSet rs = stat.executeQuery("Select * from courier_list where employee_ID = " + couriertext.getText());
+                if(!rs.next()){
+                    courierlabel.setOpaque(true);
+                    courierlabel.setBackground(Color.orange);
+                    message += "\nEmployee ID not found";
+                    valid=false;
+                }
+            
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }
+        if(weighttext.getText().length()==0){
+            weightlabel.setOpaque(true);
+            weightlabel.setBackground(Color.orange);
+            message += "\nWeight field empty";
+            valid=false;
+        }
+        else if(Double.parseDouble(weighttext.getText())<0){
+            weightlabel.setOpaque(true);
+            weightlabel.setBackground(Color.orange);
+            valid=false;
+        }
+        if(volumetext.getText().length()==0){
+            volumelabel.setOpaque(true);
+            volumelabel.setBackground(Color.orange);
+            message += "\nVolume field empty";
+            valid=false;
+        }
+        else if(Double.parseDouble(volumetext.getText())<0){
+            volumelabel.setOpaque(true);
+            volumelabel.setBackground(Color.orange);
+            valid=false;
+        }
+        if(description.getText().length()>500){
+            descriptionlabel.setOpaque(true);
+            descriptionlabel.setBackground(Color.orange);
+            message += "\nDescription exceeds character limit";
+            valid=false;
+        }
+        
+        return valid;
         
     }
 
@@ -391,14 +497,17 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelbutton;
+    private javax.swing.JLabel courierlabel;
+    private javax.swing.JTextField couriertext;
     private javax.swing.JLabel datelabel;
     private javax.swing.JTextField daytext;
     private javax.swing.JTextArea description;
+    private javax.swing.JLabel descriptionlabel;
     private javax.swing.JTextField hourtext;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -407,13 +516,13 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField minutetext;
     private javax.swing.JTextField monthtext;
     private javax.swing.JButton submitbutton;
     private javax.swing.JLabel volumelabel;
+    private javax.swing.JTextField volumetext;
     private javax.swing.JLabel weightlabel;
+    private javax.swing.JTextField weighttext;
     private javax.swing.JTextField yeartext;
     // End of variables declaration//GEN-END:variables
 }
