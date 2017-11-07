@@ -103,6 +103,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAutoRequestFocus(false);
 
         resultstable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -211,6 +212,11 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
         });
 
         updatebutton.setText("UPDATE Package Details");
+        updatebutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatebuttonActionPerformed(evt);
+            }
+        });
 
         updatetext.setForeground(new java.awt.Color(204, 204, 204));
         updatetext.setText("Package ID / tracking #");
@@ -303,6 +309,12 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
     private void volumetextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volumetextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_volumetextActionPerformed
+
+    private void updatebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatebuttonActionPerformed
+        UpdateForm up = new UpdateForm();
+        up.setVisible(true);
+        up.initDetails(Long.parseLong(updatetext.getText()));
+    }//GEN-LAST:event_updatebuttonActionPerformed
 
     /**
      * @param args the command line arguments
