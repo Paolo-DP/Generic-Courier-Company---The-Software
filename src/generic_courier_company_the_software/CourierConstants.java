@@ -13,6 +13,20 @@ import java.awt.Color;
  */
 public interface CourierConstants {
     public final String database_url = "jdbc:mysql://localhost/courierservice";
-    public final String newpackinsert = "insert into package_inventory (package_ID,trackingnumber,deposit_time,deposit_date,weight,volume,description,status,assigned_employee) values(?,?,?,?,?,?,?,?,?)";
+    public final String fullinsert = "insert into package_inventory ("
+            + "package_ID,"
+            + "trackingnumber,"
+            + "deposit_time,"
+            + "deposit_date,"
+            + "weight,"
+            + "volume,"
+            + "description,"
+            + "address,"
+            + "status,"
+            + "assigned_employee,"
+            + "deliver_date,"
+            + "deliver_time) "
+            + "values(?,?,?,?,?,?,?,?,?,?,?,?)";
     public final Color labeldefaultbg = new Color(240,240,240);
+    public final int package_inventory_numcolumns = 12;
 }
