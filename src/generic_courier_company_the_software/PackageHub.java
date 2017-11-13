@@ -8,6 +8,7 @@ package generic_courier_company_the_software;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.*;
 import javax.swing.JFrame;
 import javax.swing.table.TableColumn;
 
@@ -200,7 +201,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(volumetext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         newpackagebutton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -271,8 +272,8 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
         );
 
@@ -315,7 +316,128 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
         up.setVisible(true);
         up.initDetails(Long.parseLong(updatetext.getText()));
     }//GEN-LAST:event_updatebuttonActionPerformed
+    /*
+    Method used to update a sppecific field in the package_inventory table with 
+    a new value based on a given arguement
+    */
+    public static void updatePackageColumn(int columnindex, Object value, int argindex, Object argvalue){
+        if(columnindex<1 || columnindex >12 || argindex<1 || argindex >12){
+            System.out.println("ERROR! column not found");
+            return;
+        }
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(database_url, "root", "");
+            String statement = "UPDATE package_inventory SET "
+                    + getPackageColumnName(columnindex)+"=";
+            if(value!=null)
+                statement += value;
+            else
+                statement += "null";
+            statement +=" WHERE "
+            + getPackageColumnName(argindex)+"=";
+            if(argvalue!=null)
+                statement+=argvalue;
+            else
+                statement+="null";
+            
+            Statement stat = conn.createStatement();
+            stat.executeUpdate(statement);
+            
+                
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+    
+    public static void updatePackageRow(Object[] values, int argindex, Object argvalue){
+        if(argindex<1 || argindex >12){
+            System.out.println("ERROR! column not found");
+            return;
+        }
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(database_url, "root", "");
+            String statement = "UPDATE package_inventory SET package_ID = " + values[0];
+            for(int i=1; i<values.length; i++){
+                statement+= ","+getPackageColumnName(i+1) +"=";
+                if(values[i]==null)
+                    statement+=values[i];
+                else
+                    statement+="null";
+            }
+            statement+=" WHERE "+getPackageColumnName(argindex) + "=";
+            if(argvalue!=null)
+                statement+=argvalue;
+            else
+                statement+="null";
+            Statement stat = conn.createStatement();
+            stat.executeUpdate(statement);
+                
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        
+    }
+    
+    /*
+    Returns the package_inventory table's column name
+    based on the given index
+    Note: this must be updated whenever the tables structure 
+    is changed
+    */
+    public static String getPackageColumnName(int columnindex){
+        switch(columnindex){
+            case 1:
+                return "package_ID";
+            case 2:
+                return "tracking_number";
+            case 3:
+                return "deposit_time";
+            case 4:
+                return "deposit_date";
+            case 5:
+                return "weight";
+            case 6:
+                return "volume";
+            case 7:
+                return "description";
+            case 8:
+                return "address";
+            case 9:
+                return "status";
+            case 10:
+                return "assigned_employee";
+            case 11:
+                return "deliver_date";
+            case 12:
+                return "deliver_time";
 
+            default:
+                return null;
+        }
+    }
+    
+    public static Object[] getPackageDetails(long ID){
+        try{
+            Object[] values = new Object[package_inventory_numcolumns];
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(database_url, "root", "");
+            Statement stat = conn.createStatement();
+            ResultSet rs = stat.executeQuery("Select * from package_inventory where package_ID = " + ID);
+            if(rs.next()){
+                for(int i=0; i<values.length; i++){
+                    values[i] = rs.getObject(i+1);
+                }
+            }
+            return values;
+            
+        }catch(Exception e){
+            System.out.println(e);
+            return null;
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
