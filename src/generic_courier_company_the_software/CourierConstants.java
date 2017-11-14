@@ -27,6 +27,20 @@ public interface CourierConstants {
             + "deliver_date,"
             + "deliver_time) "
             + "values(?,?,?,?,?,?,?,?,?,?,?,?)";
+    public final String fullupdate = "UPDATE package_inventory SET "
+            + "package_ID=?, "
+            + "trackingnumber=?, "
+            + "deposit_time=?, "
+            + "deposit_date=?, "
+            + "weight=?, "
+            + "volume=?, "
+            + "description=?, "
+            + "address=?, "
+            + "status=?, "
+            + "assigned_employee=?, "
+            + "deliver_date=?, "
+            + "deliver_time=? WHERE ";
     public final Color labeldefaultbg = new Color(240,240,240);
     public final int package_inventory_numcolumns = 12;
+    public final String[] status = {null, "Accepted", "Processing", "Shipping", "Delivered"};
 }

@@ -358,21 +358,14 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection(database_url, "root", "");
-            String statement = "UPDATE package_inventory SET package_ID = " + values[0];
-            for(int i=1; i<values.length; i++){
-                statement+= ","+getPackageColumnName(i+1) +"=";
-                if(values[i]==null)
-                    statement+=values[i];
-                else
-                    statement+="null";
+            String update = fullupdate + getPackageColumnName(argindex)+"=?";
+            System.out.println("Statement: "+update);
+            PreparedStatement stat = conn.prepareStatement(update);
+            for(int i=1; i<= values.length; i++){
+                stat.setObject(i, values[i-1]);
             }
-            statement+=" WHERE "+getPackageColumnName(argindex) + "=";
-            if(argvalue!=null)
-                statement+=argvalue;
-            else
-                statement+="null";
-            Statement stat = conn.createStatement();
-            stat.executeUpdate(statement);
+            stat.setObject(values.length+1, argvalue);
+            stat.executeUpdate();
                 
         }catch(Exception e){
             System.out.println(e);
@@ -391,7 +384,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
             case 1:
                 return "package_ID";
             case 2:
-                return "tracking_number";
+                return "trackingnumber";
             case 3:
                 return "deposit_time";
             case 4:

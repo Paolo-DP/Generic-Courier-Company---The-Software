@@ -6,6 +6,7 @@
 package generic_courier_company_the_software;
 
 import java.sql.*;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,9 +33,6 @@ public class UpdateForm extends javax.swing.JFrame implements CourierConstants{
                     values[i] = rs.getObject(i+1);
                     updateField(i+1);
                 }
-                
-                
-                
             }
             
         }catch(Exception e){
@@ -102,10 +100,12 @@ public class UpdateForm extends javax.swing.JFrame implements CourierConstants{
                     addresstext.setText("--");
                 break;
             case 9:
-                if(values[columnindex-1]!=null)
-                    status.setSelectedIndex(0);
-                else
-                    status.setSelectedItem(values[columnindex-1]);
+                for(int i=0; i<status.length; i++){
+                    if(values[columnindex-1].equals(status[i])){
+                        statusbox.setSelectedIndex(i);
+                        break;
+                    }
+                }
                 break;
             case 10:
                 if(values[columnindex-1]!=null)
@@ -142,7 +142,68 @@ public class UpdateForm extends javax.swing.JFrame implements CourierConstants{
                             minutetext1.setText(time);
                     }
                 }
+                else{
+                    hourtext1.setText("--");
+                    minutetext1.setText("--");
+                }
                 break;
+            
+        }
+    }
+    
+    private Object getField(int columnindex){
+        switch(columnindex){
+            case 1:
+                return IDtext.getText();
+            case 2:
+                return trackingtext.getText();
+            case 3:
+                if(hourtext.getText().equals("--") || minutetext.getText().equals("--"))
+                    return null;
+                else
+                    return Integer.parseInt(hourtext.getText()+minutetext.getText());
+            case 4:
+                if(yeartext.getText().equals("--") || 
+                        monthtext.getText().equals("--") || 
+                        daytext.getText().equals("--"))
+                    return null;
+                else
+                    return Integer.parseInt(yeartext.getText()+monthtext.getText()+daytext.getText());
+            case 5:
+                if(weighttext.getText().equals("--"))
+                    return null;
+                else
+                    return weighttext.getText();
+            case 6:
+                if(volumetext.getText().equals("--"))
+                    return null;
+                else
+                    return volumetext.getText();
+            case 7:
+                return descriptiontext.getText();
+            case 8:
+                return addresstext.getText();
+            case 9:
+                return status[statusbox.getSelectedIndex()];
+            case 10:
+                if(employeetext.getText().equals("--"))
+                    return null;
+                else
+                    return Integer.parseInt(employeetext.getText());
+            case 11:
+                if(yeartext1.getText().equals("--") || 
+                        monthtext1.getText().equals("--") || 
+                        daytext1.getText().equals("--"))
+                    return null;
+                else
+                    return Integer.parseInt(yeartext1.getText()+monthtext1.getText()+daytext1.getText());
+            case 12:
+                if(hourtext1.getText().equals("--") || minutetext1.getText().equals("--"))
+                    return null;
+                else
+                    return Integer.parseInt(hourtext1.getText()+minutetext1.getText());
+            default:
+                return null;
             
         }
     }
@@ -171,7 +232,7 @@ public class UpdateForm extends javax.swing.JFrame implements CourierConstants{
         jLabel10 = new javax.swing.JLabel();
         weighttext = new javax.swing.JTextField();
         volumetext = new javax.swing.JTextField();
-        status = new javax.swing.JComboBox<>();
+        statusbox = new javax.swing.JComboBox<>();
         employeetext = new javax.swing.JTextField();
         yeartext = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
@@ -258,10 +319,10 @@ public class UpdateForm extends javax.swing.JFrame implements CourierConstants{
 
         jLabel10.setText("Delivered Date and Time:");
 
-        status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---", "Accepted", "Precessing", "Shipping", "Delivered" }));
-        status.addActionListener(new java.awt.event.ActionListener() {
+        statusbox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---", "Accepted", "Precessing", "Shipping", "Delivered" }));
+        statusbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                statusActionPerformed(evt);
+                statusboxActionPerformed(evt);
             }
         });
 
@@ -372,7 +433,7 @@ public class UpdateForm extends javax.swing.JFrame implements CourierConstants{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(statusbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(employeetext, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(yeartext1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -425,7 +486,7 @@ public class UpdateForm extends javax.swing.JFrame implements CourierConstants{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(statusbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
@@ -547,7 +608,12 @@ public class UpdateForm extends javax.swing.JFrame implements CourierConstants{
 
     private void updatebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatebuttonActionPerformed
         try{
-            
+            for(int i=3; i<=package_inventory_numcolumns; i++){
+                values[i-1] = getField(i);
+                System.out.println("Updated values " + i + " = " + values[i-1]);
+            }
+            PackageHub.updatePackageRow(values, 1, values[0]);
+            JOptionPane.showMessageDialog(null, "Update Successful", "Update", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
         }catch(Exception e){
             System.out.println(e);
@@ -558,9 +624,9 @@ public class UpdateForm extends javax.swing.JFrame implements CourierConstants{
         this.dispose();
     }//GEN-LAST:event_cancelbuttonActionPerformed
 
-    private void statusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusActionPerformed
+    private void statusboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusboxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_statusActionPerformed
+    }//GEN-LAST:event_statusboxActionPerformed
 
     private void monthtextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthtextActionPerformed
         // TODO add your handling code here:
@@ -653,7 +719,7 @@ public class UpdateForm extends javax.swing.JFrame implements CourierConstants{
     private javax.swing.JTextField minutetext1;
     private javax.swing.JTextField monthtext;
     private javax.swing.JTextField monthtext1;
-    private javax.swing.JComboBox<String> status;
+    private javax.swing.JComboBox<String> statusbox;
     private javax.swing.JLabel trackingtext;
     private javax.swing.JButton updatebutton;
     private javax.swing.JTextField volumetext;
