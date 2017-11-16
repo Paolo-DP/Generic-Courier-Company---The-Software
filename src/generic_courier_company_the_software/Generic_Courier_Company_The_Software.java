@@ -12,7 +12,7 @@ Jashandeep Bhuller
 Jan Reece Reyes
 Julio Simeon
  */
-public class Generic_Courier_Company_The_Software {
+public class Generic_Courier_Company_The_Software implements CourierConstants{
 
     /*
     This is the Main Class that will launch the different forms
@@ -25,8 +25,16 @@ public class Generic_Courier_Company_The_Software {
     */
     
     public static void main(String[] args) {
-        SetUp setup = new SetUp();
-        setup.setVisible(true);
+        if(donesetup==true){
+            SetUp setup = new SetUp();
+            setup.setVisible(true);
+        }
+        else{
+            switch(mode){
+                
+            }
+        }
+        
     }
     
 }

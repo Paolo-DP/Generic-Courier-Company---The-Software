@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 03, 2017 at 08:52 AM
+-- Generation Time: Nov 06, 2017 at 05:28 AM
 -- Server version: 10.1.28-MariaDB
 -- PHP Version: 7.1.10
 
@@ -29,17 +29,17 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `package_inventory` (
-  `package_ID` double NOT NULL,
-  `trackingnumber` varchar(20) NOT NULL,
-  `deposit_time` int(11) NOT NULL,
-  `deposit_date` int(11) NOT NULL,
-  `weight` double NOT NULL,
-  `volume` double NOT NULL,
-  `description` varchar(500) NOT NULL,
-  `status` varchar(30) NOT NULL,
-  `assigned_employee` varchar(100) NOT NULL,
-  `deliver_date` int(11) NOT NULL,
-  `deliver_time` int(11) NOT NULL
+  `package_ID` bigint(20) DEFAULT NULL,
+  `trackingnumber` varchar(20) DEFAULT NULL,
+  `deposit_time` int(11) DEFAULT NULL,
+  `deposit_date` int(11) DEFAULT NULL,
+  `weight` double DEFAULT NULL,
+  `volume` double DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  `status` varchar(30) DEFAULT NULL,
+  `assigned_employee` int(11) DEFAULT NULL,
+  `deliver_date` int(11) DEFAULT NULL,
+  `deliver_time` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -47,7 +47,12 @@ CREATE TABLE `package_inventory` (
 --
 
 INSERT INTO `package_inventory` (`package_ID`, `trackingnumber`, `deposit_time`, `deposit_date`, `weight`, `volume`, `description`, `status`, `assigned_employee`, `deliver_date`, `deliver_time`) VALUES
-(0, '2017100000', 900, 20171030, 69, 69, 'weed', '', '', 0, 0);
+(0, '2017100000', 900, 20171030, 69, 69, 'weed', '', 0, 0, 0),
+(20170101000000, '125837B48740', 2400, 20170101, 765, 45.8, '', NULL, NULL, NULL, NULL),
+(20170101000000, '125837b48740', 420, 20170101, 34, 56, 'not weed', NULL, NULL, NULL, NULL),
+(20170101000001, '125837b48741', 2400, 20170101, 1, 1, 'maybe weed', NULL, NULL, NULL, NULL),
+(20170101000002, '125837b48742', 900, 20170101, 43, 234, 'definitely not weed', 'Processing', 11514795, NULL, NULL),
+(20170101000003, '125837b48743', 2400, 20170101, 123, 123123, 'surely not weed', 'Processing', 11514795, NULL, NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -5,37 +5,77 @@
  */
 package generic_courier_company_the_software;
 
+import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.sql.*;
 import javax.swing.JFrame;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import java.util.ArrayList;
 
 /**
  *
  * @author Lenovo
  */
 public class PackageHub extends javax.swing.JFrame implements CourierConstants{
-
+    private boolean[] searchparameters;
+    private TableModel model;
     /**
      * Creates new form PackageHub
      */
     public PackageHub() {
         initComponents();
         initResultsTable();
+        searchparameters = new boolean[package_inventory_numcolumns];
+        for(int i=0; i<searchparameters.length; i++){
+            searchparameters[i] = false;
+        }
+        updatetext.addMouseListener(new MouseListener(){
+            public void mouseClicked(MouseEvent e) {
+                if(updatetext.getText().equals("Package ID / tracking #")){
+                    updatetext.setText("");
+                    updatetext.setForeground(Color.black);
+                }
+                
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            public void mouseExited(MouseEvent e) {
+                
+            }
+        });
+        
+        
     }
     
     private void initResultsTable(){
-        resultstable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Tracking Number", "Deposit Date", "Deposit Time", "Weight"
-            }
-        ));
         
+        try{
+            int dbsize = getDatabaseSize();
+            Object[][] data = new Object[dbsize][package_inventory_numcolumns];
+            Object[] IDs = getColumn(1);
+            for(int i=0; i<dbsize; i++){
+                data[i] = getPackageDetails((Long)IDs[i]);
+            }
+            model = new HubTableModel(inventory_cols, data);
+            resultstable.setModel(model);
+        }catch(Exception e){
+            System.out.println("initialize table " + e);
+        }
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -50,10 +90,50 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
         jScrollPane2 = new javax.swing.JScrollPane();
         resultstable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        gensearchtext = new javax.swing.JTextField();
         searchbutton = new javax.swing.JButton();
+        statussearch = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        weighttext = new javax.swing.JTextField();
+        volumetext = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        depmonth = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        depday = new javax.swing.JComboBox<>();
+        depyeartext = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        dlvyeartext = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        dlvmonth = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        dlvday = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        addresstext = new javax.swing.JTextField();
+        employeetext = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         newpackagebutton = new javax.swing.JButton();
+        updatebutton = new javax.swing.JButton();
+        updatetext = new javax.swing.JTextField();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        View = new javax.swing.JMenu();
+        tableview_packageID = new javax.swing.JCheckBoxMenuItem();
+        tableview_trackingnumber = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem3 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem4 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem5 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem6 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem7 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem8 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem9 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem10 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem11 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem12 = new javax.swing.JCheckBoxMenuItem();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -67,27 +147,26 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAutoRequestFocus(false);
 
         resultstable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
+        resultstable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(resultstable);
 
-        jTextField1.setText("jTextField1");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        gensearchtext.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                gensearchtextActionPerformed(evt);
             }
         });
 
+        searchbutton.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         searchbutton.setText("Search");
         searchbutton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -95,24 +174,161 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
             }
         });
 
+        statussearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---", "Accepted", "Precessing", "Shipping", "Delivered" }));
+        statussearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statussearchActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Weight:");
+
+        jLabel2.setText("Volume: ");
+
+        weighttext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                weighttextActionPerformed(evt);
+            }
+        });
+
+        volumetext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                volumetextActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Status:");
+
+        jLabel4.setText("Deposit Date:");
+
+        jLabel5.setText("/");
+
+        depmonth.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+
+        jLabel6.setText("/");
+
+        depday.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+
+        jLabel7.setText("Deliver Date:");
+
+        jLabel8.setText("/");
+
+        dlvmonth.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+
+        jLabel9.setText("/");
+
+        dlvday.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+
+        jLabel10.setText("Assigned Employee:");
+
+        jLabel11.setText("Address:");
+
+        jLabel12.setText("General Search");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 866, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchbutton, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(gensearchtext, javax.swing.GroupLayout.PREFERRED_SIZE, 925, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchbutton, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(weighttext, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(volumetext, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(dlvyeartext, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(dlvmonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(dlvday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel10))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(depyeartext, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(depmonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(depday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(79, 79, 79)
+                                .addComponent(jLabel11)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(addresstext)
+                            .addComponent(employeetext))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(statussearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(247, 247, 247))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1)
-                    .addComponent(searchbutton, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(gensearchtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(weighttext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(volumetext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(depmonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6)
+                            .addComponent(depday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(depyeartext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)
+                            .addComponent(statussearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11)
+                            .addComponent(addresstext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
+                            .addComponent(dlvday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dlvyeartext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7)
+                            .addComponent(dlvmonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10)
+                            .addComponent(employeetext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         newpackagebutton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -123,6 +339,21 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
             }
         });
 
+        updatebutton.setText("UPDATE Package Details");
+        updatebutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatebuttonActionPerformed(evt);
+            }
+        });
+
+        updatetext.setForeground(new java.awt.Color(204, 204, 204));
+        updatetext.setText("Package ID / tracking #");
+        updatetext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatetextActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -130,15 +361,139 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(newpackagebutton)
-                .addContainerGap(203, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(updatebutton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(updatetext, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(newpackagebutton)
-                .addContainerGap(25, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(newpackagebutton)
+                    .addComponent(updatebutton)
+                    .addComponent(updatetext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
+
+        jMenu1.setText("File");
+        jMenuBar1.add(jMenu1);
+
+        View.setText("Table");
+
+        tableview_packageID.setSelected(true);
+        tableview_packageID.setText("Package ID");
+        tableview_packageID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tableview_packageIDActionPerformed(evt);
+            }
+        });
+        View.add(tableview_packageID);
+
+        tableview_trackingnumber.setSelected(true);
+        tableview_trackingnumber.setText("Tracking Number");
+        tableview_trackingnumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tableview_trackingnumberActionPerformed(evt);
+            }
+        });
+        View.add(tableview_trackingnumber);
+
+        jCheckBoxMenuItem3.setSelected(true);
+        jCheckBoxMenuItem3.setText("jCheckBoxMenuItem1");
+        jCheckBoxMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem3ActionPerformed(evt);
+            }
+        });
+        View.add(jCheckBoxMenuItem3);
+
+        jCheckBoxMenuItem4.setSelected(true);
+        jCheckBoxMenuItem4.setText("jCheckBoxMenuItem1");
+        jCheckBoxMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem4ActionPerformed(evt);
+            }
+        });
+        View.add(jCheckBoxMenuItem4);
+
+        jCheckBoxMenuItem5.setSelected(true);
+        jCheckBoxMenuItem5.setText("jCheckBoxMenuItem1");
+        jCheckBoxMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem5ActionPerformed(evt);
+            }
+        });
+        View.add(jCheckBoxMenuItem5);
+
+        jCheckBoxMenuItem6.setSelected(true);
+        jCheckBoxMenuItem6.setText("jCheckBoxMenuItem1");
+        jCheckBoxMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem6ActionPerformed(evt);
+            }
+        });
+        View.add(jCheckBoxMenuItem6);
+
+        jCheckBoxMenuItem7.setSelected(true);
+        jCheckBoxMenuItem7.setText("jCheckBoxMenuItem1");
+        jCheckBoxMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem7ActionPerformed(evt);
+            }
+        });
+        View.add(jCheckBoxMenuItem7);
+
+        jCheckBoxMenuItem8.setSelected(true);
+        jCheckBoxMenuItem8.setText("jCheckBoxMenuItem1");
+        jCheckBoxMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem8ActionPerformed(evt);
+            }
+        });
+        View.add(jCheckBoxMenuItem8);
+
+        jCheckBoxMenuItem9.setSelected(true);
+        jCheckBoxMenuItem9.setText("jCheckBoxMenuItem1");
+        jCheckBoxMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem9ActionPerformed(evt);
+            }
+        });
+        View.add(jCheckBoxMenuItem9);
+
+        jCheckBoxMenuItem10.setSelected(true);
+        jCheckBoxMenuItem10.setText("jCheckBoxMenuItem1");
+        jCheckBoxMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem10ActionPerformed(evt);
+            }
+        });
+        View.add(jCheckBoxMenuItem10);
+
+        jCheckBoxMenuItem11.setSelected(true);
+        jCheckBoxMenuItem11.setText("jCheckBoxMenuItem1");
+        jCheckBoxMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem11ActionPerformed(evt);
+            }
+        });
+        View.add(jCheckBoxMenuItem11);
+
+        jCheckBoxMenuItem12.setSelected(true);
+        jCheckBoxMenuItem12.setText("jCheckBoxMenuItem1");
+        jCheckBoxMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem12ActionPerformed(evt);
+            }
+        });
+        View.add(jCheckBoxMenuItem12);
+
+        jMenuBar1.add(View);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -148,42 +503,286 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(36, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void gensearchtextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gensearchtextActionPerformed
         // TODO add your handling code here:
            
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_gensearchtextActionPerformed
 
     private void searchbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchbuttonActionPerformed
-        
+        for(int i=0; i<searchparameters.length; i++){
+            searchparameters[i] = false;
+        }
     }//GEN-LAST:event_searchbuttonActionPerformed
 
+    private void setSearchParameters(){
+        if(gensearchtext.getText().length()!=0){
+            for(int i=0; i<searchparameters.length; i++){
+                searchparameters[i] = true;
+            }
+        }
+        else{
+            searchparameters[3] = (depyeartext.getText().length()!=0
+                                    && depmonth.getSelectedIndex()!=0
+                                    && depday.getSelectedIndex()!=0);
+            searchparameters[4] = weighttext.getText().length()!=0;
+            searchparameters[5] = volumetext.getText().length()!=0;
+            searchparameters[7] = addresstext.getText().length()!=0;
+            searchparameters[8] = statussearch.getSelectedIndex()!=0;
+            searchparameters[9] = employeetext.getText().length()!=0;
+            searchparameters[10] = (dlvyeartext.getText().length()!=0
+                                    && dlvmonth.getSelectedIndex()!=0
+                                    && dlvday.getSelectedIndex()!=0);
+        }
+    }
+    
     private void newpackagebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newpackagebuttonActionPerformed
         NewPackageForm pack = new NewPackageForm();
         pack.setVisible(true);
+        
     }//GEN-LAST:event_newpackagebuttonActionPerformed
 
+    
+    private void updatetextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatetextActionPerformed
+        
+    }//GEN-LAST:event_updatetextActionPerformed
+
+    private void statussearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statussearchActionPerformed
+        
+    }//GEN-LAST:event_statussearchActionPerformed
+
+    private void weighttextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weighttextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_weighttextActionPerformed
+
+    private void volumetextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volumetextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_volumetextActionPerformed
+
+    private void updatebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatebuttonActionPerformed
+        UpdateForm up = new UpdateForm();
+        up.setVisible(true);
+        up.initDetails(Long.parseLong(updatetext.getText()));
+    }//GEN-LAST:event_updatebuttonActionPerformed
+
+    private void tableview_packageIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableview_packageIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tableview_packageIDActionPerformed
+
+    private void tableview_trackingnumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableview_trackingnumberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tableview_trackingnumberActionPerformed
+
+    private void jCheckBoxMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMenuItem3ActionPerformed
+
+    private void jCheckBoxMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMenuItem4ActionPerformed
+
+    private void jCheckBoxMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMenuItem5ActionPerformed
+
+    private void jCheckBoxMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMenuItem6ActionPerformed
+
+    private void jCheckBoxMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMenuItem7ActionPerformed
+
+    private void jCheckBoxMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMenuItem8ActionPerformed
+
+    private void jCheckBoxMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMenuItem9ActionPerformed
+
+    private void jCheckBoxMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem10ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMenuItem10ActionPerformed
+
+    private void jCheckBoxMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem11ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMenuItem11ActionPerformed
+
+    private void jCheckBoxMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem12ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMenuItem12ActionPerformed
+    /*
+    Method used to update a sppecific field in the package_inventory table with 
+    a new value based on a given arguement
+    */
+    public static void updatePackageColumn(int columnindex, Object value, int argindex, Object argvalue){
+        if(columnindex<1 || columnindex >12 || argindex<1 || argindex >12){
+            System.out.println("ERROR! column not found");
+            return;
+        }
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(database_url, "root", "");
+            String statement = "UPDATE package_inventory SET "
+                    + getPackageColumnName(columnindex)+"=";
+            if(value!=null)
+                statement += value;
+            else
+                statement += "null";
+            statement +=" WHERE "
+            + getPackageColumnName(argindex)+"=";
+            if(argvalue!=null)
+                statement+=argvalue;
+            else
+                statement+="null";
+            
+            Statement stat = conn.createStatement();
+            stat.executeUpdate(statement);
+            
+                
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+    
+    public static void updatePackageRow(Object[] values, int argindex, Object argvalue){
+        if(argindex<1 || argindex >12){
+            System.out.println("ERROR! column not found");
+            return;
+        }
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(database_url, "root", "");
+            String update = fullupdate + getPackageColumnName(argindex)+"=?";
+            System.out.println("Statement: "+update);
+            PreparedStatement stat = conn.prepareStatement(update);
+            for(int i=1; i<= values.length; i++){
+                stat.setObject(i, values[i-1]);
+            }
+            stat.setObject(values.length+1, argvalue);
+            stat.executeUpdate();
+                
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        
+    }
+    
+    /*
+    Returns the package_inventory table's column name
+    based on the given index
+    Note: this must be updated whenever the tables structure 
+    is changed
+    */
+    public static String getPackageColumnName(int columnindex){
+        switch(columnindex){
+            case 1:
+                return "package_ID";
+            case 2:
+                return "trackingnumber";
+            case 3:
+                return "deposit_time";
+            case 4:
+                return "deposit_date";
+            case 5:
+                return "weight";
+            case 6:
+                return "volume";
+            case 7:
+                return "description";
+            case 8:
+                return "address";
+            case 9:
+                return "status";
+            case 10:
+                return "assigned_employee";
+            case 11:
+                return "deliver_date";
+            case 12:
+                return "deliver_time";
+
+            default:
+                return null;
+        }
+    }
+    
+    public static Object[] getPackageDetails(long ID){
+        try{
+            Object[] values = new Object[package_inventory_numcolumns];
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(database_url, "root", "");
+            Statement stat = conn.createStatement();
+            ResultSet rs = stat.executeQuery("Select * from package_inventory where package_ID = " + ID);
+            if(rs.next()){
+                for(int i=0; i<values.length; i++){
+                    values[i] = rs.getObject(i+1);
+                }
+            }
+            return values;
+            
+        }catch(Exception e){
+            System.out.println(e);
+            return null;
+        }
+    }
+    
+    public static int getDatabaseSize(){
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(database_url, "root", "");
+            Statement stat = conn.createStatement();
+            ResultSet rs = stat.executeQuery("Select COUNT(package_ID) from package_inventory");
+            if(rs.next())
+                return rs.getInt(1);
+            else
+                return 0;
+        }catch(Exception e){
+            System.out.println("get Database Size Error: " + e);
+            return 0;
+        }
+    }
+    
+    public static Object[] getColumn(int colindex){
+        Object[] coldata = new Object[getDatabaseSize()];
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(database_url, "root", "");
+            Statement stat = conn.createStatement();
+            ResultSet rs = stat.executeQuery("Select " + getPackageColumnName(colindex)+" from package_inventory" );
+            int i=0;
+            while(rs.next()){
+                coldata[i] = rs.getObject(1);
+                i++;
+            }
+        }catch(Exception e){
+            System.out.println("getColumn Error: " + e);
+            return null;
+        }
+        return coldata;
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -220,13 +819,55 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu View;
+    private javax.swing.JTextField addresstext;
+    private javax.swing.JComboBox<String> depday;
+    private javax.swing.JComboBox<String> depmonth;
+    private javax.swing.JTextField depyeartext;
+    private javax.swing.JComboBox<String> dlvday;
+    private javax.swing.JComboBox<String> dlvmonth;
+    private javax.swing.JTextField dlvyeartext;
+    private javax.swing.JTextField employeetext;
+    private javax.swing.JTextField gensearchtext;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem10;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem11;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem12;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem3;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem4;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem5;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem6;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem7;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem8;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem9;
     private javax.swing.JDialog jDialog1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JButton newpackagebutton;
     private javax.swing.JTable resultstable;
     private javax.swing.JButton searchbutton;
+    private javax.swing.JComboBox<String> statussearch;
+    private javax.swing.JCheckBoxMenuItem tableview_packageID;
+    private javax.swing.JCheckBoxMenuItem tableview_trackingnumber;
+    private javax.swing.JButton updatebutton;
+    private javax.swing.JTextField updatetext;
+    private javax.swing.JTextField volumetext;
+    private javax.swing.JTextField weighttext;
     // End of variables declaration//GEN-END:variables
+
+    
 }
