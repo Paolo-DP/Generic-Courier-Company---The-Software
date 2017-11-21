@@ -12,9 +12,11 @@ package generic_courier_company_the_software;
 public class test {
     
     public static void main(String[] args){
-        for(int i=1; i<=31; i++){
-            System.out.println(i);
-        }
+        System.out.println(isNumeric(""));
+    }
+    public static boolean isNumeric(String str){
+        
+        return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
     }
     
 }
