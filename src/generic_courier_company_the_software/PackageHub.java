@@ -959,7 +959,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                     track = conn.prepareStatement("SELECT MAX(package_ID) FROM package_inventory WHERE deposit_date = " + date);
                     rs = track.executeQuery();
                     rs.next();
-                    packID = rs.getLong(1);
+                    packID = rs.getLong(1)+1;
                     
                 }
                 else{
