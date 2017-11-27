@@ -75,7 +75,7 @@ public class Delivery extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jTextField2);
-        jTextField2.setBounds(162, 115, 110, 20);
+        jTextField2.setBounds(162, 115, 110, 22);
 
         jPasswordField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -83,7 +83,7 @@ public class Delivery extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jPasswordField2);
-        jPasswordField2.setBounds(162, 173, 110, 20);
+        jPasswordField2.setBounds(162, 173, 110, 22);
 
         jButton1.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
         jButton1.setText("Login");
@@ -119,11 +119,11 @@ public class Delivery extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
         );
 
         pack();
@@ -183,8 +183,13 @@ public class Delivery extends javax.swing.JFrame {
        int pwd =Integer.parseInt(String.copyValueOf(pass));
        
        System.out.println("Username: " + user + "\nPassword: " + pwd);
-       if(validate_login(user,pwd))
-       JOptionPane.showMessageDialog(null, "Correct Login Credentials");        
+       if(validate_login(user,pwd)){
+       JOptionPane.showMessageDialog(null, "Correct Login Credentials");   
+       Display dis = new Display();
+       dis.setVisible(true);
+       dis.personn(pwd);
+       dis.initDetails(pwd);
+       }
        else
           JOptionPane.showMessageDialog(null, "Incorrect Login Credentials");      
 

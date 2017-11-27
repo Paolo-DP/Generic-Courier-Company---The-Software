@@ -5,11 +5,21 @@
  */
 package generic_courier_company_the_software;
 
+import static generic_courier_company_the_software.CourierConstants.database_url;
+import static generic_courier_company_the_software.CourierConstants.package_inventory_numcolumns;
+import static generic_courier_company_the_software.CourierConstants.status;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Administrator
  */
-public class Display extends javax.swing.JFrame {
+public class Display extends javax.swing.JFrame implements CourierConstants{
 
     /**
      * Creates new form Display
@@ -36,19 +46,14 @@ public class Display extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         id = new javax.swing.JLabel();
         tracking = new javax.swing.JLabel();
         weight = new javax.swing.JLabel();
         volume = new javax.swing.JLabel();
         address = new javax.swing.JLabel();
         person = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        deliveryd = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        time = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        stat = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -71,8 +76,6 @@ public class Display extends javax.swing.JFrame {
 
         jLabel9.setText("Address: ");
 
-        jLabel10.setText("jLabel10");
-
         id.setText("jLabel11");
 
         tracking.setText("jLabel12");
@@ -85,24 +88,21 @@ public class Display extends javax.swing.JFrame {
 
         person.setText("jLabel17");
 
-        jLabel18.setText("Delivery Date: ");
-
-        deliveryd.setText("jLabel19");
-
-        jLabel1.setText("Delivery Time: ");
-
-        time.setText("jLabel3");
-
         jLabel3.setText("Status: ");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        stat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---", "Accepted", "Processing", "Shipping", "Delivered" }));
+        stat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                statActionPerformed(evt);
             }
         });
 
         jButton1.setText("Proceed");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Update");
 
@@ -128,48 +128,40 @@ public class Display extends javax.swing.JFrame {
                             .addComponent(jLabel8)
                             .addComponent(jLabel4)
                             .addComponent(jLabel9)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel1))))
+                            .addComponent(jLabel3))
                         .addGap(87, 87, 87)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(time)
-                            .addComponent(jLabel10)
-                            .addComponent(deliveryd)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tracking)
-                                    .addComponent(id))
-                                .addGap(76, 76, 76)
+                                    .addComponent(volume)
+                                    .addComponent(address))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(tracking)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
                                 .addComponent(jButton1))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(weight, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(volume)
-                                        .addComponent(address)))
-                                .addGap(76, 76, 76)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(70, 78, Short.MAX_VALUE))
+                                    .addComponent(id)
+                                    .addComponent(stat, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(weight))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(person))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel10))
+                        .addComponent(jLabel4)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
@@ -186,32 +178,21 @@ public class Display extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
                             .addComponent(volume))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(address))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel18)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel3))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(deliveryd)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(time)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(32, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(71, 71, 71))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addGap(18, 18, 18)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)
-                        .addGap(113, 113, 113))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton3)
+                            .addComponent(jLabel9)
+                            .addComponent(address))
+                        .addGap(36, 36, 36)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(stat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -228,9 +209,103 @@ public class Display extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+     Object[] values = new Object[package_inventory_numcolumns];
+     
+     public void initDetails(int ID){
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(database_url, "root", "");
+            Statement stat = conn.createStatement();
+            ResultSet rs = stat.executeQuery("Select * from package_inventory where assigned_employee = " + ID);
+            if(rs.next()){
+                for(int i=0; i<values.length; i++){
+                    values[i] = rs.getObject(i+1);
+                    updateField(i+1);
+                }
+            }
+            
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+     
+      public void personn(int ID){
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(database_url, "root", "");
+            Statement stat = conn.createStatement();
+            ResultSet rs = stat.executeQuery("Select * from courier_list where employee_ID = " + ID);
+            if(rs.next()){
+                    values[10] = rs.getObject(2);
+                    person.setText(values[1].toString());
+            }
+            
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+      
+       
+     
+     private void updateField(int columnindex){
+        switch(columnindex){
+             case 1:
+                id.setText(values[columnindex-1].toString());
+                break;
+            case 2:
+                tracking.setText(values[columnindex-1].toString());
+                break;
+           
+            case 5:
+                if(values[columnindex-1]!=null)
+                    weight.setText(values[columnindex-1].toString());
+                else
+                    weight.setText("--");
+                    
+                break;
+            case 6:
+                if(values[columnindex-1]!=null)
+                    volume.setText(values[columnindex-1].toString());
+                else
+                    volume.setText("--");
+                break;
+           
+            case 8:
+                if(values[columnindex-1]!=null)
+                    address.setText(values[columnindex-1].toString());
+                else
+                    address.setText("--");
+                break; 
+                
+           
+        }
+    }
+     
+           
+    private void statActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_statActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+         for(int i=0; i<status.length; i++){
+                    if(stat.getSelectedItem().equals(status[i])){
+                         try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(database_url, "root", "");
+            Statement stat = conn.createStatement();
+            ResultSet rs = stat.executeQuery("Update package_inventory Set status = stat.getSelectedItem WHERE employee_ID = 123);
+            
+            
+        }catch(Exception e){
+            System.out.println(e);
+        }
+                       
+                    }
+                }
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -269,16 +344,11 @@ public class Display extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel address;
-    private javax.swing.JLabel deliveryd;
     private javax.swing.JLabel id;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -289,7 +359,7 @@ public class Display extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel person;
-    private javax.swing.JLabel time;
+    private javax.swing.JComboBox<String> stat;
     private javax.swing.JLabel tracking;
     private javax.swing.JLabel volume;
     private javax.swing.JLabel weight;
