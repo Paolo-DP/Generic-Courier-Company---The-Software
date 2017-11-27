@@ -25,7 +25,8 @@ public class Generic_Courier_Company_The_Software {
     */
     
     public static void main(String[] args) {
-        // TODO code application logic here
+        SetUp setup = new SetUp();
+        setup.setVisible(true);
     }
     
 }
