@@ -5,6 +5,14 @@
  */
 package generic_courier_company_the_software;
 
+import static generic_courier_company_the_software.CourierConstants.database_url;
+import static generic_courier_company_the_software.CourierConstants.package_inventory_numcolumns;
+import static generic_courier_company_the_software.CourierConstants.status;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Administrator
@@ -27,6 +35,7 @@ public class updatedeliveryinfo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel7 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -34,21 +43,21 @@ public class updatedeliveryinfo extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         id = new javax.swing.JLabel();
         tracking = new javax.swing.JLabel();
         weight = new javax.swing.JLabel();
         volume = new javax.swing.JLabel();
         address = new javax.swing.JLabel();
-        deliverydate = new javax.swing.JLabel();
-        time = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        confirmbutton = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+
+        jLabel7.setText("jLabel7");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Please update any information that was changed in the Delivery Details");
+        jLabel1.setText("Please update Delivery Details:");
 
         jLabel2.setText("Package_ID: ");
 
@@ -60,10 +69,6 @@ public class updatedeliveryinfo extends javax.swing.JFrame {
 
         jLabel6.setText("Address: ");
 
-        jLabel7.setText("Delivery Date: ");
-
-        jLabel8.setText("Delivery Time: ");
-
         id.setText("jLabel9");
 
         tracking.setText("jLabel10");
@@ -74,64 +79,61 @@ public class updatedeliveryinfo extends javax.swing.JFrame {
 
         address.setText("jLabel13");
 
-        deliverydate.setText("jLabel14");
-
-        time.setText("jLabel15");
-
-        jButton1.setText("Confirm");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        confirmbutton.setText("Confirm");
+        confirmbutton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                confirmbuttonActionPerformed(evt);
             }
         });
 
         jButton2.setText("Cancel");
+
+        jLabel8.setText("jLabel8");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(45, 45, 45)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(confirmbutton)
+                                .addComponent(jLabel3)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(66, 66, 66)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel8))
-                                .addGap(86, 86, 86)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(time)
-                                    .addComponent(deliverydate)
                                     .addComponent(address)
                                     .addComponent(volume)
-                                    .addComponent(weight)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(94, 94, 94)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(weight)
+                                    .addComponent(tracking)
                                     .addComponent(id)
-                                    .addComponent(tracking)))
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(34, Short.MAX_VALUE))
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(80, 80, 80)
+                                .addComponent(jButton2))))
+                    .addComponent(jLabel8))
+                .addContainerGap(99, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(id))
@@ -142,30 +144,24 @@ public class updatedeliveryinfo extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(weight)
-                    .addComponent(jButton1))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(volume)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jButton2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(weight))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(volume)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(address))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(deliverydate))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
-                    .addComponent(time))
-                .addContainerGap(40, Short.MAX_VALUE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(confirmbutton)
+                    .addComponent(jButton2))
+                .addGap(25, 25, 25))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -181,10 +177,64 @@ public class updatedeliveryinfo extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    Object[] values = new Object[package_inventory_numcolumns];
+    private void confirmbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmbuttonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        
+         try{
+            for(int i=1; i<=package_inventory_numcolumns; i++){
+                values[i-1] = getField(i);
+            }
+            PackageHub.updatePackageRow(values, 1, values[8]);
+            this.dispose();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+         
+          for(int i=0; i<status.length; i++){
+                    if(stat.getSelectedItem().toString().equals(status[i])){
+                         try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(database_url, "root", "");
+            Statement sta = conn.createStatement();
+            sta.executeUpdate("UPDATE package_inventory SET status = " + stat.getSelectedItem().toString() + "WHERE assigned_employee = " + idd);
+          
+        }catch(Exception e){
+            System.out.println(e);
+        }
+                       
+                    }
+                }
+    }//GEN-LAST:event_confirmbuttonActionPerformed
+
+    
+    
+    private Object getField(int columnindex){
+        switch(columnindex){
+            case 1:
+                return id.getText();
+            case 2:
+                return tracking.getText();
+          
+            case 5:
+                if(weight.getText().equals("--"))
+                    return null;
+                else
+                    return weight.getText();
+            case 6:
+                if(volume.getText().equals("--"))
+                    return null;
+                else
+                    return volume.getText();
+           
+            case 8:
+                return address.getText();
+          
+            default:
+                return null;
+            
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -223,10 +273,10 @@ public class updatedeliveryinfo extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel address;
-    private javax.swing.JLabel deliverydate;
+    private javax.swing.JButton confirmbutton;
     private javax.swing.JLabel id;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -236,7 +286,6 @@ public class updatedeliveryinfo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel time;
     private javax.swing.JLabel tracking;
     private javax.swing.JLabel volume;
     private javax.swing.JLabel weight;

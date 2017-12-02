@@ -105,6 +105,11 @@ public class Display extends javax.swing.JFrame implements CourierConstants{
         });
 
         jButton2.setText("Update");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Cancel");
 
@@ -228,16 +233,16 @@ public class Display extends javax.swing.JFrame implements CourierConstants{
             System.out.println(e);
         }
     }
-     
+     int idd;
       public void personn(int ID){
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection(database_url, "root", "");
             Statement stat = conn.createStatement();
-            ResultSet rs = stat.executeQuery("Select * from courier_list where employee_ID = " + ID);
+            ResultSet rs = stat.executeQuery("Select name from courier_list where employee_ID = " + ID);
+            idd = ID;
             if(rs.next()){
-                    values[10] = rs.getObject(2);
-                    person.setText(values[1].toString());
+                    person.setText(rs.getObject(1).toString());
             }
             
         }catch(Exception e){
@@ -277,7 +282,13 @@ public class Display extends javax.swing.JFrame implements CourierConstants{
                     address.setText("--");
                 break; 
                 
-           
+            case 9:
+                 for(int i=0; i<status.length; i++){
+                    if(values[columnindex-1].equals(status[i])){
+                        stat.setSelectedIndex(i);
+                        break;
+                    }
+                }
         }
     }
      
@@ -288,24 +299,15 @@ public class Display extends javax.swing.JFrame implements CourierConstants{
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-         for(int i=0; i<status.length; i++){
-                    if(stat.getSelectedItem().equals(status[i])){
-                         try{
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(database_url, "root", "");
-            Statement stat = conn.createStatement();
-            ResultSet rs = stat.executeQuery("Update package_inventory Set status = stat.getSelectedItem WHERE employee_ID = 123);
-            
-            
-        }catch(Exception e){
-            System.out.println(e);
-        }
-                       
-                    }
-                }
+        
         
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
