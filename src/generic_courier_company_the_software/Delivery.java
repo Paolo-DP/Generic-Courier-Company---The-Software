@@ -52,6 +52,7 @@ public class Delivery extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(255, 153, 51));
         jPanel1.setLayout(null);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
@@ -59,10 +60,10 @@ public class Delivery extends javax.swing.JFrame {
         jPanel1.add(jLabel1);
         jLabel1.setBounds(66, 115, 78, 17);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel2.setText("Please enter the required inputs");
+        jLabel2.setFont(new java.awt.Font("Arial", 3, 18)); // NOI18N
+        jLabel2.setText("PLEASE ENTER THE REQUIRED INFORMATION: ");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(73, 42, 255, 22);
+        jLabel2.setBounds(20, 50, 430, 22);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
         jLabel3.setText("ID Number: ");
@@ -86,34 +87,34 @@ public class Delivery extends javax.swing.JFrame {
         jPasswordField2.setBounds(162, 173, 110, 22);
 
         jButton1.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
-        jButton1.setText("Login");
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/generic_courier_company_the_software/sta.gif"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
         jPanel1.add(jButton1);
-        jButton1.setBounds(25, 232, 71, 25);
+        jButton1.setBounds(40, 220, 90, 70);
 
         jButton2.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
-        jButton2.setText("Cancel");
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/generic_courier_company_the_software/3d_arrows_black_back_animation_clipart.gif"))); // NOI18N
         jPanel1.add(jButton2);
-        jButton2.setBounds(301, 232, 77, 25);
+        jButton2.setBounds(270, 220, 150, 50);
 
         jButton3.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
-        jButton3.setText("Create New Profile");
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/generic_courier_company_the_software/new-text-button-animation.gif"))); // NOI18N
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
         jPanel1.add(jButton3);
-        jButton3.setBounds(114, 232, 161, 25);
+        jButton3.setBounds(150, 220, 110, 80);
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/generic_courier_company_the_software/button.png"))); // NOI18N
         jLabel5.setText("jLabel5");
         jPanel1.add(jLabel5);
-        jLabel5.setBounds(280, 120, 110, 70);
+        jLabel5.setBounds(280, 120, 130, 70);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
