@@ -904,7 +904,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 argvalue = gensearchtext.getText();
                 break;
             case 4:
-                argvalue = (Integer.parseInt(depyeartext.getText())*10000) + (depmonth.getSelectedIndex()*100) + depmonth.getSelectedIndex();
+                argvalue = (Integer.parseInt(depyeartext.getText())*10000) + (depmonth.getSelectedIndex()*100) + depday.getSelectedIndex();
                 break;
             case 5:
                 argvalue = Double.parseDouble(weighttext.getText());
