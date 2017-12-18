@@ -25,7 +25,7 @@ public class Generic_Courier_Company_The_Software implements CourierConstants{
     */
     
     public static void main(String[] args) {
-        if(donesetup==true){
+        if(true){
             SetUp setup = new SetUp();
             setup.setVisible(true);
         }
