@@ -98,6 +98,11 @@ public class Delivery extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/generic_courier_company_the_software/3d_arrows_black_back_animation_clipart.gif"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton2);
         jButton2.setBounds(270, 220, 150, 50);
 
@@ -185,8 +190,11 @@ public class Delivery extends javax.swing.JFrame {
        
        System.out.println("Username: " + user + "\nPassword: " + pwd);
        if(validate_login(user,pwd)){
-       JOptionPane.showMessageDialog(null, "Correct Login Credentials");   
+       JOptionPane.showMessageDialog(null, "Correct Login Credentials");  
+       
+       
        Display dis = new Display();
+       dis.givepass(pwd);
        dis.setVisible(true);
        dis.personn(pwd);
        dis.initDetails(pwd);
@@ -197,6 +205,13 @@ public class Delivery extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        
+        this.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */

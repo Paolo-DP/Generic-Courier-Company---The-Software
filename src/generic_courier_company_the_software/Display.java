@@ -128,6 +128,11 @@ public class Display extends javax.swing.JFrame implements CourierConstants{
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/generic_courier_company_the_software/head_arrows_left_animation_clipart.gif"))); // NOI18N
         jButton3.setText("CANCEL");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/generic_courier_company_the_software/gifdel.gif"))); // NOI18N
         jLabel1.setText("jLabel1");
@@ -337,13 +342,27 @@ public class Display extends javax.swing.JFrame implements CourierConstants{
         // TODO add your handling code here:
         
         
-        
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
+    int x;
+     public void givepass(int pass){
+         x = pass;
+        
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
+       updatedeliveryinfo dis = new updatedeliveryinfo();
+       dis.setVisible(true);
+       dis.personn(x);
+       dis.initDetails(x);
         
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
