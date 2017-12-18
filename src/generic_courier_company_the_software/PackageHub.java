@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public class PackageHub extends javax.swing.JFrame implements CourierConstants{
     private boolean[] searchparameters;
     private TableModel model;
+    private boolean restrictsearch = false;
     /**
      * Creates new form PackageHub
      */
@@ -59,7 +60,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
         
         
     }
-    
+    //initializes the table with the whole package inventory
     private void initResultsTable(){
         
         try{
@@ -74,6 +75,32 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
         }catch(Exception e){
             System.out.println("initialize table " + e);
         }
+    }
+    
+    //given the specific columns and data this method will set the table
+    private void setTableData(String[] columns, Object[][] data){
+        model = new HubTableModel(columns, data);
+        resultstable.setModel(model);
+    }
+   
+    //will set the table using only the array of Package IDs
+    private void setTableData(Object[] IDs){
+        Object[][] data;
+        if(IDs.length==0){
+            data = new Object[1][package_inventory_numcolumns];
+            for(int i=0; i<package_inventory_numcolumns; i++){
+                    data[0][i] = "No Results";
+            }
+            
+        }
+        else{
+            data = new Object[IDs.length][package_inventory_numcolumns];
+            for(int i=0; i<IDs.length; i++){
+                    data[i] = getPackageDetails((Long)IDs[i]);
+            }
+        }
+        model = new HubTableModel(inventory_cols, data);
+        resultstable.setModel(model);
     }
     
 
@@ -115,13 +142,15 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
         addresstext = new javax.swing.JTextField();
         employeetext = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        showallBTN = new javax.swing.JButton();
+        strictsearchCHK = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         newpackagebutton = new javax.swing.JButton();
         updatebutton = new javax.swing.JButton();
         updatetext = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        View = new javax.swing.JMenu();
+        tablemenu = new javax.swing.JMenu();
         tableview_packageID = new javax.swing.JCheckBoxMenuItem();
         tableview_trackingnumber = new javax.swing.JCheckBoxMenuItem();
         jCheckBoxMenuItem3 = new javax.swing.JCheckBoxMenuItem();
@@ -225,6 +254,20 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
 
         jLabel12.setText("General Search");
 
+        showallBTN.setText("Show All");
+        showallBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showallBTNActionPerformed(evt);
+            }
+        });
+
+        strictsearchCHK.setText("Restrict Search");
+        strictsearchCHK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                strictsearchCHKActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -235,9 +278,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(gensearchtext, javax.swing.GroupLayout.PREFERRED_SIZE, 925, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchbutton, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
+                        .addComponent(gensearchtext))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -280,13 +321,17 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                                 .addComponent(jLabel11)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(addresstext)
-                            .addComponent(employeetext))
+                            .addComponent(employeetext, javax.swing.GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE)
+                            .addComponent(addresstext))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(statussearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(247, 247, 247))))
+                        .addComponent(statussearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(25, 25, 25)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(searchbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(showallBTN, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                    .addComponent(strictsearchCHK)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -296,7 +341,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                     .addComponent(gensearchtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
-                .addGap(6, 6, 6)
+                .addGap(5, 5, 5)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -317,7 +362,8 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                             .addComponent(jLabel3)
                             .addComponent(statussearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel11)
-                            .addComponent(addresstext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(addresstext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(showallBTN))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
@@ -327,7 +373,8 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                             .addComponent(jLabel7)
                             .addComponent(dlvmonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel10)
-                            .addComponent(employeetext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(employeetext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(strictsearchCHK))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -381,7 +428,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
 
-        View.setText("Table");
+        tablemenu.setText("Table");
 
         tableview_packageID.setSelected(true);
         tableview_packageID.setText("Package ID");
@@ -390,7 +437,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 tableview_packageIDActionPerformed(evt);
             }
         });
-        View.add(tableview_packageID);
+        tablemenu.add(tableview_packageID);
 
         tableview_trackingnumber.setSelected(true);
         tableview_trackingnumber.setText("Tracking Number");
@@ -399,7 +446,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 tableview_trackingnumberActionPerformed(evt);
             }
         });
-        View.add(tableview_trackingnumber);
+        tablemenu.add(tableview_trackingnumber);
 
         jCheckBoxMenuItem3.setSelected(true);
         jCheckBoxMenuItem3.setText("jCheckBoxMenuItem1");
@@ -408,7 +455,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 jCheckBoxMenuItem3ActionPerformed(evt);
             }
         });
-        View.add(jCheckBoxMenuItem3);
+        tablemenu.add(jCheckBoxMenuItem3);
 
         jCheckBoxMenuItem4.setSelected(true);
         jCheckBoxMenuItem4.setText("jCheckBoxMenuItem1");
@@ -417,7 +464,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 jCheckBoxMenuItem4ActionPerformed(evt);
             }
         });
-        View.add(jCheckBoxMenuItem4);
+        tablemenu.add(jCheckBoxMenuItem4);
 
         jCheckBoxMenuItem5.setSelected(true);
         jCheckBoxMenuItem5.setText("jCheckBoxMenuItem1");
@@ -426,7 +473,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 jCheckBoxMenuItem5ActionPerformed(evt);
             }
         });
-        View.add(jCheckBoxMenuItem5);
+        tablemenu.add(jCheckBoxMenuItem5);
 
         jCheckBoxMenuItem6.setSelected(true);
         jCheckBoxMenuItem6.setText("jCheckBoxMenuItem1");
@@ -435,7 +482,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 jCheckBoxMenuItem6ActionPerformed(evt);
             }
         });
-        View.add(jCheckBoxMenuItem6);
+        tablemenu.add(jCheckBoxMenuItem6);
 
         jCheckBoxMenuItem7.setSelected(true);
         jCheckBoxMenuItem7.setText("jCheckBoxMenuItem1");
@@ -444,7 +491,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 jCheckBoxMenuItem7ActionPerformed(evt);
             }
         });
-        View.add(jCheckBoxMenuItem7);
+        tablemenu.add(jCheckBoxMenuItem7);
 
         jCheckBoxMenuItem8.setSelected(true);
         jCheckBoxMenuItem8.setText("jCheckBoxMenuItem1");
@@ -453,7 +500,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 jCheckBoxMenuItem8ActionPerformed(evt);
             }
         });
-        View.add(jCheckBoxMenuItem8);
+        tablemenu.add(jCheckBoxMenuItem8);
 
         jCheckBoxMenuItem9.setSelected(true);
         jCheckBoxMenuItem9.setText("jCheckBoxMenuItem1");
@@ -462,7 +509,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 jCheckBoxMenuItem9ActionPerformed(evt);
             }
         });
-        View.add(jCheckBoxMenuItem9);
+        tablemenu.add(jCheckBoxMenuItem9);
 
         jCheckBoxMenuItem10.setSelected(true);
         jCheckBoxMenuItem10.setText("jCheckBoxMenuItem1");
@@ -471,7 +518,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 jCheckBoxMenuItem10ActionPerformed(evt);
             }
         });
-        View.add(jCheckBoxMenuItem10);
+        tablemenu.add(jCheckBoxMenuItem10);
 
         jCheckBoxMenuItem11.setSelected(true);
         jCheckBoxMenuItem11.setText("jCheckBoxMenuItem1");
@@ -480,7 +527,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 jCheckBoxMenuItem11ActionPerformed(evt);
             }
         });
-        View.add(jCheckBoxMenuItem11);
+        tablemenu.add(jCheckBoxMenuItem11);
 
         jCheckBoxMenuItem12.setSelected(true);
         jCheckBoxMenuItem12.setText("jCheckBoxMenuItem1");
@@ -489,9 +536,9 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 jCheckBoxMenuItem12ActionPerformed(evt);
             }
         });
-        View.add(jCheckBoxMenuItem12);
+        tablemenu.add(jCheckBoxMenuItem12);
 
-        jMenuBar1.add(View);
+        jMenuBar1.add(tablemenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -517,7 +564,7 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -530,11 +577,32 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
     }//GEN-LAST:event_gensearchtextActionPerformed
 
     private void searchbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchbuttonActionPerformed
+        restrictsearch = strictsearchCHK.isSelected();
         for(int i=0; i<searchparameters.length; i++){
             searchparameters[i] = false;
         }
+        setSearchParameters();
+        ArrayList finalsearchresults = new ArrayList<>();
+        Object[] results = null;
+        if(!restrictsearch){
+            for(int i=0; i<searchparameters.length; i++){
+                if(searchparameters[i]){
+                    System.out.println("Database Search start: " + inventory_cols[i]);
+                    results = searchDatabase(i+1);
+                    for(int j=0; j<results.length; j++){
+                        if(!finalsearchresults.contains(results[j]))
+                            finalsearchresults.add(results[j]);
+                    }
+                }
+            }
+        }
+        System.out.println("Search Complete. Number of results: " +finalsearchresults.size());
+        setTableData(finalsearchresults.toArray());
+        
+        
     }//GEN-LAST:event_searchbuttonActionPerformed
-
+    
+    //will configure the search based on the non empty fields
     private void setSearchParameters(){
         if(gensearchtext.getText().length()!=0){
             for(int i=0; i<searchparameters.length; i++){
@@ -632,6 +700,14 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
     private void jCheckBoxMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem12ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBoxMenuItem12ActionPerformed
+
+    private void showallBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showallBTNActionPerformed
+        initResultsTable();
+    }//GEN-LAST:event_showallBTNActionPerformed
+
+    private void strictsearchCHKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_strictsearchCHKActionPerformed
+       restrictsearch = strictsearchCHK.isSelected();
+    }//GEN-LAST:event_strictsearchCHKActionPerformed
     /*
     Method used to update a sppecific field in the package_inventory table with 
     a new value based on a given arguement
@@ -763,13 +839,14 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
         }
     }
     
+    //returns an ogject array containing data of a column
     public static Object[] getColumn(int colindex){
         Object[] coldata = new Object[getDatabaseSize()];
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection(database_url, "root", "");
             Statement stat = conn.createStatement();
-            ResultSet rs = stat.executeQuery("Select " + getPackageColumnName(colindex)+" from package_inventory" );
+            ResultSet rs = stat.executeQuery("Select " + inventory_cols[colindex-1]+" from package_inventory" );
             int i=0;
             while(rs.next()){
                 coldata[i] = rs.getObject(1);
@@ -782,6 +859,119 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
         return coldata;
     }
     
+    public static Object[] getColumn(int colindex, int argindex, Object argvalue){
+        Object[] data=null;
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(database_url, "root", "");
+            //gets the size of the search result
+            String statement = "Select COUNT(" + inventory_cols[colindex-1]
+                    +") from package_inventory WHERE "+ inventory_cols[argindex-1] + "=?";
+            PreparedStatement stat = conn.prepareStatement(statement);
+            stat.setObject(1, argvalue);
+            ResultSet rs = stat.executeQuery();
+            if(rs.next()){
+                data = new Object[rs.getInt(1)];
+                //gets the data of the search result
+                statement = "Select " + inventory_cols[colindex-1]
+                    +" from package_inventory WHERE "+ inventory_cols[argindex-1] + "=?";
+                stat = conn.prepareStatement(statement);
+                stat.setObject(1, argvalue);
+                rs = stat.executeQuery();
+                int i=0;
+                while(rs.next()){
+                    data[i] = rs.getObject(1);
+                    i++;
+                }
+                System.out.println("Search Result Size: " + data.length);
+            }
+            
+            return data;
+        }catch(Exception e){
+            System.out.println("getColumn Error: " + e);
+            return null;
+        }
+    }
+    
+    public Object[] searchDatabase(int argindex){
+        Object argvalue = null;
+        switch(argindex){
+            case 1:
+                if(isNumeric(gensearchtext.getText()))
+                    argvalue = Long.parseLong(gensearchtext.getText());
+                break;
+            case 2:
+                argvalue = gensearchtext.getText();
+                break;
+            case 4:
+                argvalue = (Integer.parseInt(depyeartext.getText())*10000) + (depmonth.getSelectedIndex()*100) + depmonth.getSelectedIndex();
+                break;
+            case 5:
+                argvalue = Double.parseDouble(weighttext.getText());
+                break;
+            case 6:
+                argvalue = Double.parseDouble(volumetext.getText());
+                break;
+            case 7:
+                argvalue = gensearchtext.getText();
+                break;
+            case 8:
+                argvalue = addresstext.getText();
+                break;
+            case 9:
+                if(statussearch.getSelectedIndex()==0)
+                    argvalue = null;
+                else
+                    argvalue = status[statussearch.getSelectedIndex()];
+                break;
+            case 10:
+                argvalue = Integer.parseInt(employeetext.getText());
+                break;
+            case 11:
+                argvalue = Integer.parseInt(dlvyeartext.getText() + dlvmonth.getSelectedIndex() + dlvday.getSelectedIndex());
+                break;
+        }
+        System.out.println("Searching Database:\nResult Column: "+inventory_cols[0]
+            +"\nArgument: " + inventory_cols[argindex-1]+" = " + argvalue);
+        return (getColumn(1, argindex, argvalue));
+    }
+    public static boolean isNumeric(String str){
+        return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
+    }
+    
+    /**
+    *Generates a unique ID for a new package
+    * Date must be in YYYYMMDD format
+    * 
+    * returns null if invalid format
+    */
+    public static Long createPackageID(int date){
+        if(!isNumeric(Integer.toString(date)))
+            return null;
+        else{
+            try{
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection conn = DriverManager.getConnection(database_url, "root", "");
+                PreparedStatement track = conn.prepareStatement("SELECT package_ID FROM package_inventory WHERE deposit_date = " + date);
+                ResultSet rs = track.executeQuery();
+                Long packID;
+                if(rs.next()){
+                    track = conn.prepareStatement("SELECT MAX(package_ID) FROM package_inventory WHERE deposit_date = " + date);
+                    rs = track.executeQuery();
+                    rs.next();
+                    packID = rs.getLong(1)+1;
+                    
+                }
+                else{
+                    packID = (long)date*1000000;
+                }
+                return packID;
+            }catch(Exception e){
+                System.out.println("create Package ID ERROR: " + e);
+                return null;
+            }
+        }
+    }
     
     /**
      * @param args the command line arguments
@@ -819,7 +1009,6 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu View;
     private javax.swing.JTextField addresstext;
     private javax.swing.JComboBox<String> depday;
     private javax.swing.JComboBox<String> depmonth;
@@ -860,7 +1049,10 @@ public class PackageHub extends javax.swing.JFrame implements CourierConstants{
     private javax.swing.JButton newpackagebutton;
     private javax.swing.JTable resultstable;
     private javax.swing.JButton searchbutton;
+    private javax.swing.JButton showallBTN;
     private javax.swing.JComboBox<String> statussearch;
+    private javax.swing.JCheckBox strictsearchCHK;
+    private javax.swing.JMenu tablemenu;
     private javax.swing.JCheckBoxMenuItem tableview_packageID;
     private javax.swing.JCheckBoxMenuItem tableview_trackingnumber;
     private javax.swing.JButton updatebutton;

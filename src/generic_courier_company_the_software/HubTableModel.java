@@ -43,8 +43,4 @@ public class HubTableModel extends AbstractTableModel{
     public boolean isCellEditable(int rowIndex, int columnIndex){
         return false;
     }
-    
-    
-    
-    
 }

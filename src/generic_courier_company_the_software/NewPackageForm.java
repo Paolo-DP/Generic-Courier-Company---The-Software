@@ -355,7 +355,7 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
                 String datedeposit = yeartext.getText()+monthtext.getText()+daytext.getText();
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection(database_url, "root", "");
-                PreparedStatement track = conn.prepareStatement("SELECT package_ID FROM package_inventory WHERE deposit_date = " + datedeposit);
+                /*PreparedStatement track = conn.prepareStatement("SELECT package_ID FROM package_inventory WHERE deposit_date = " + datedeposit);
                 ResultSet rs = track.executeQuery();
                 String trackingnum="1";
                 long packID=0;
@@ -370,6 +370,9 @@ public class NewPackageForm extends javax.swing.JFrame implements CourierConstan
                 else{
                     trackingnum = Long.toHexString(Long.parseLong(yeartext.getText()+monthtext.getText()+daytext.getText()+"000000")).toUpperCase();
                 }
+                */
+                Long packID = PackageHub.createPackageID(Integer.parseInt(datedeposit));
+                String trackingnum = Long.toHexString(packID);
                 //System.out.println("ID: " + Long.decode("0x"+trackingnum) + "\nTracking: " + trackingnum);
                 PreparedStatement pst = conn.prepareStatement(fullinsert);
                 pst.setLong(1, packID);

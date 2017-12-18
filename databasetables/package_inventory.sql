@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 06, 2017 at 05:28 AM
+-- Generation Time: Nov 21, 2017 at 03:53 AM
 -- Server version: 10.1.28-MariaDB
 -- PHP Version: 7.1.10
 
@@ -36,6 +36,7 @@ CREATE TABLE `package_inventory` (
   `weight` double DEFAULT NULL,
   `volume` double DEFAULT NULL,
   `description` varchar(500) DEFAULT NULL,
+  `address` varchar(500) DEFAULT NULL,
   `status` varchar(30) DEFAULT NULL,
   `assigned_employee` int(11) DEFAULT NULL,
   `deliver_date` int(11) DEFAULT NULL,
@@ -46,13 +47,17 @@ CREATE TABLE `package_inventory` (
 -- Dumping data for table `package_inventory`
 --
 
-INSERT INTO `package_inventory` (`package_ID`, `trackingnumber`, `deposit_time`, `deposit_date`, `weight`, `volume`, `description`, `status`, `assigned_employee`, `deliver_date`, `deliver_time`) VALUES
-(0, '2017100000', 900, 20171030, 69, 69, 'weed', '', 0, 0, 0),
-(20170101000000, '125837B48740', 2400, 20170101, 765, 45.8, '', NULL, NULL, NULL, NULL),
-(20170101000000, '125837b48740', 420, 20170101, 34, 56, 'not weed', NULL, NULL, NULL, NULL),
-(20170101000001, '125837b48741', 2400, 20170101, 1, 1, 'maybe weed', NULL, NULL, NULL, NULL),
-(20170101000002, '125837b48742', 900, 20170101, 43, 234, 'definitely not weed', 'Processing', 11514795, NULL, NULL),
-(20170101000003, '125837b48743', 2400, 20170101, 123, 123123, 'surely not weed', 'Processing', 11514795, NULL, NULL);
+INSERT INTO `package_inventory` (`package_ID`, `trackingnumber`, `deposit_time`, `deposit_date`, `weight`, `volume`, `description`, `address`, `status`, `assigned_employee`, `deliver_date`, `deliver_time`) VALUES
+(0, '2017100000', 900, 20171030, 69, 69, 'weed', '', '', 0, NULL, NULL),
+(20170101000000, '125837B48740', 2400, 20170101, 765, 45.8, '', '', NULL, NULL, NULL, NULL),
+(20170101000000, '125837b48740', 420, 20170101, 34, 56, 'not weed', '', NULL, NULL, NULL, NULL),
+(20170101000001, '125837b48741', 2400, 20170101, 1, 1, 'maybe weed', '', NULL, NULL, NULL, NULL),
+(20170101000002, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(20170101000003, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(19980808000001, '122c24f69201', 700, 19980808, 555, 112, 'dasaf', '123', 'Processing', 11514795, NULL, NULL),
+(20170101000005, '125837b48745', 7, 20170101, 1, 1, 'dank', '1', 'Processing', 11514795, NULL, NULL),
+(20170101000006, '125837b48746', 2400, 20170101, 987, 987, 'gfxmcgvhblkgkhfchxcvk,khgfxmcgvhblkgkhfchxcvk,khgfxmcgvhblkgkhfchxcvk,khgfxmcgvhblkgkhfchxcvk,khgfxmcgvhblkgkhfchxcvk,khgfxmcgvhblkgkhfchxcvk,khgfxmcgvhblkgkhfchxcvk,kh', 'there', 'Processing', 11514795, NULL, NULL),
+(20170101000007, '125837b48747', 2400, 20170101, 69, 856, '\nweed', 'jtdfgihou;yktrydth', 'Processing', 11514795, NULL, NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

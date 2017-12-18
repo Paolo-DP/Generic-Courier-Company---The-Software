@@ -24,7 +24,7 @@
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="View">
+        <Menu class="javax.swing.JMenu" name="tablemenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Table"/>
           </Properties>
@@ -188,7 +188,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jScrollPane2" min="-2" pref="423" max="-2" attributes="0"/>
+              <Component id="jScrollPane2" min="-2" pref="561" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -222,14 +222,12 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="gensearchtext" min="-2" pref="925" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="searchbutton" pref="152" max="32767" attributes="0"/>
+                          <Component id="gensearchtext" max="32767" attributes="0"/>
                       </Group>
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
@@ -278,15 +276,20 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="employeetext" pref="756" max="32767" attributes="0"/>
                               <Component id="addresstext" max="32767" attributes="0"/>
-                              <Component id="employeetext" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="statussearch" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="247" max="-2" attributes="0"/>
                       </Group>
+                  </Group>
+                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="searchbutton" max="32767" attributes="0"/>
+                      <Component id="showallBTN" pref="222" max="32767" attributes="0"/>
+                      <Component id="strictsearchCHK" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -300,7 +303,7 @@
                       <Component id="searchbutton" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                       <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -325,6 +328,7 @@
                               <Component id="statussearch" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="addresstext" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="showallBTN" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -336,6 +340,7 @@
                               <Component id="dlvmonth" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="employeetext" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="strictsearchCHK" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -591,6 +596,22 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="General Search"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="showallBTN">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Show All"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="showallBTNActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="strictsearchCHK">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Restrict Search"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="strictsearchCHKActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
